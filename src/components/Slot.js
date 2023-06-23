@@ -1,7 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const Document = () => {
+const Slot = () => {
   return (
     <>
       <section className="bg-image mt-5">
@@ -15,38 +15,33 @@ const Document = () => {
                     <form>
                       <hr />
                       <div className="tab">
-                        <legend>Upload Documents</legend>
+                        <legend>Slot Booking</legend>
                         <div className="form-outline mb-4">
-                          <label className="form-label" htmlFor="documentType">
-                            Document Type
-                          </label>
-                          <select
-                            class="form-select"
-                            id="documenttype"
-                            name="documenttype"
-                            required
-                          >
-                            <option value="HSC" selected>
-                              HSC Marksheet
-                            </option>
-                            <option value="AADHAR-CARD">Aadhar Card</option>
-                            <option value="PHOTO">Photo</option>
-                            <option value="SIGNATURE">Signature</option>
-                          </select>
-                          <span id="documenterror"></span>
-                        </div>
-                        <div className="form-outline mb-4">
-                          <label className="form-label" htmlFor="city">
-                            City
+                          <label className="form-label" htmlFor="slotdate">
+                            Slot Date
                           </label>
                           <input
-                            type="file"
-                            name="attachments"
-                            id="attachments"
+                            type="date"
+                            name="slotdate"
+                            id="slotdate"
                             className="form-control form-control"
                             required
                           ></input>
-                          <span id="attachmentserror"></span>
+                          <span id="slotdateerror"></span>
+                        </div>
+                        <div className="form-outline mb-4">
+                          <label className="form-label" htmlFor="slottime">
+                            Slot Time
+                          </label>
+                          <input
+                            type="number"
+                            name="slottime"
+                            id="slottime"
+                            placeholder="Enter Slot Time"
+                            className="form-control form-control"
+                            required
+                          ></input>
+                          <span id="slottimeerror"></span>
                         </div>
                       </div>
                       <button type="submit" className="btn btn-success">
@@ -64,4 +59,4 @@ const Document = () => {
   );
 };
 
-export default Document;
+export default Slot;

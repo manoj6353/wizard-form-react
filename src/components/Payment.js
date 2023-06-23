@@ -1,7 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const Document = () => {
+const Payment = () => {
   return (
     <>
       <section className="bg-image mt-5">
@@ -15,38 +15,39 @@ const Document = () => {
                     <form>
                       <hr />
                       <div className="tab">
-                        <legend>Upload Documents</legend>
+                        <legend>Licanse Payment</legend>
                         <div className="form-outline mb-4">
-                          <label className="form-label" htmlFor="documentType">
-                            Document Type
-                          </label>
-                          <select
-                            class="form-select"
-                            id="documenttype"
-                            name="documenttype"
-                            required
-                          >
-                            <option value="HSC" selected>
-                              HSC Marksheet
-                            </option>
-                            <option value="AADHAR-CARD">Aadhar Card</option>
-                            <option value="PHOTO">Photo</option>
-                            <option value="SIGNATURE">Signature</option>
-                          </select>
-                          <span id="documenterror"></span>
-                        </div>
-                        <div className="form-outline mb-4">
-                          <label className="form-label" htmlFor="city">
-                            City
+                          <label className="form-label" htmlFor="bankname">
+                            Bank Name
                           </label>
                           <input
-                            type="file"
-                            name="attachments"
-                            id="attachments"
+                            type="text"
+                            name="bankname"
+                            id="bankname"
+                            placeholder="Enter a Bank Name"
                             className="form-control form-control"
                             required
                           ></input>
-                          <span id="attachmentserror"></span>
+                          <span id="banknameerror"></span>
+                        </div>
+                        <div className="form-outline mb-4">
+                          <label className="form-label" htmlFor="carddetails">
+                            Card Details
+                          </label>
+                          <input
+                            type="number"
+                            name="carddetails"
+                            id="carddetails"
+                            placeholder="Enter a Card Details"
+                            className="form-control form-control"
+                            required
+                          ></input>
+                          <span id="carddetailserror"></span>
+                        </div>
+                        <div className="form-outline mb-4">
+                          <input type="checkbox" name="terms" value="true">
+                            Tearms and Conditions
+                          </input>
                         </div>
                       </div>
                       <button type="submit" className="btn btn-success">
@@ -64,4 +65,4 @@ const Document = () => {
   );
 };
 
-export default Document;
+export default Payment;
