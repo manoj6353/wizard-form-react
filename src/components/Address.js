@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { multiStepContext } from "../StepContext";
 
 const Address = () => {
+  const { setStep, userData, setUserData } = useContext(multiStepContext);
+
   return (
     <>
       <section className="bg-image mt-5">
@@ -24,6 +27,13 @@ const Address = () => {
                             type="text"
                             name="address"
                             id="address"
+                            value={userData["address"]}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                address: e.target.value,
+                              });
+                            }}
                             className="form-control form-control"
                             placeholder="Address Line 1"
                             required
@@ -38,6 +48,13 @@ const Address = () => {
                             type="text"
                             name="city"
                             id="city"
+                            value={userData["city"]}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                city: e.target.value,
+                              });
+                            }}
                             placeholder="Enter City"
                             className="form-control form-control"
                             required
@@ -52,6 +69,13 @@ const Address = () => {
                             type="text"
                             name="state"
                             id="state"
+                            value={userData["state"]}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                state: e.target.value,
+                              });
+                            }}
                             placeholder="Enter State"
                             className="form-control form-control"
                             required
@@ -66,6 +90,13 @@ const Address = () => {
                             type="number"
                             name="pincode"
                             id="pincode"
+                            value={userData["pincode"]}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                pincode: e.target.value,
+                              });
+                            }}
                             placeholder="Enter Pincode"
                             className="form-control form-control"
                             required
@@ -73,9 +104,20 @@ const Address = () => {
                           <span id="pincodeerror"></span>
                         </div>
                       </div>
-                      <button type="submit" className="btn btn-success">
-                        Submit
-                      </button>
+                      <div>
+                        <button
+                          className="btn btn-success"
+                          onClick={() => setStep(1)}
+                        >
+                          Prev
+                        </button>
+                        <button
+                          className="btn btn-success"
+                          onClick={() => setStep(3)}
+                        >
+                          Next
+                        </button>
+                      </div>
                     </form>
                   </div>
                 </div>

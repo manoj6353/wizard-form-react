@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { multiStepContext } from "../StepContext";
 
 const Document = () => {
+  const { setStep, userData, setUserData } = useContext(multiStepContext);
   return (
     <>
       <section className="bg-image mt-5">
@@ -24,6 +26,13 @@ const Document = () => {
                             class="form-select"
                             id="documenttype"
                             name="documenttype"
+                            value={userData["documenttype"]}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                documenttype: e.target.value,
+                              });
+                            }}
                             required
                           >
                             <option value="HSC" selected>
@@ -43,15 +52,33 @@ const Document = () => {
                             type="file"
                             name="attachments"
                             id="attachments"
+                            value={userData["attachments"]}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                attachments: e.target.value,
+                              });
+                            }}
                             className="form-control form-control"
                             required
                           ></input>
                           <span id="attachmentserror"></span>
                         </div>
                       </div>
-                      <button type="submit" className="btn btn-success">
-                        Submit
-                      </button>
+                      <div>
+                        <button
+                          className="btn btn-success"
+                          onClick={() => setStep(2)}
+                        >
+                          Prev
+                        </button>
+                        <button
+                          className="btn btn-success"
+                          onClick={() => setStep(4)}
+                        >
+                          Next
+                        </button>
+                      </div>
                     </form>
                   </div>
                 </div>

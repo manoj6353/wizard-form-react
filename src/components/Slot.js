@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { multiStepContext } from "../StepContext";
 
 const Slot = () => {
+  const { setStep, userData, setUserData } = useContext(multiStepContext);
   return (
     <>
       <section className="bg-image mt-5">
@@ -24,6 +26,13 @@ const Slot = () => {
                             type="date"
                             name="slotdate"
                             id="slotdate"
+                            value={userData["slotdate"]}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                slotdate: e.target.value,
+                              });
+                            }}
                             className="form-control form-control"
                             required
                           ></input>
@@ -37,6 +46,13 @@ const Slot = () => {
                             type="number"
                             name="slottime"
                             id="slottime"
+                            value={userData["slottime"]}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                slottime: e.target.value,
+                              });
+                            }}
                             placeholder="Enter Slot Time"
                             className="form-control form-control"
                             required
@@ -44,9 +60,20 @@ const Slot = () => {
                           <span id="slottimeerror"></span>
                         </div>
                       </div>
-                      <button type="submit" className="btn btn-success">
-                        Submit
-                      </button>
+                      <div>
+                        <button
+                          className="btn btn-success"
+                          onClick={() => setStep(3)}
+                        >
+                          Prev
+                        </button>
+                        <button
+                          className="btn btn-success"
+                          onClick={() => setStep(5)}
+                        >
+                          Next
+                        </button>
+                      </div>
                     </form>
                   </div>
                 </div>

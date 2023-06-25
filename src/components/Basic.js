@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { multiStepContext } from "../StepContext";
 
 const Basic = () => {
+  const { setStep, userData, setUserData } = useContext(multiStepContext);
+  const initialValues = { firstName: "", lastName: "" };
+  const [formValues, setFormValues] = useState(initialValues);
+  const handleChange = (e) => {
+    const { firstName, value } = e.target;
+    console.log(firstName);
+    setFormValues({
+      ...formValues,
+      [firstName]: value,
+    });
+    console.log(formValues);
+    setStep(2);
+  };
+
   return (
     <>
       <section className="bg-image mt-5">
@@ -23,6 +38,13 @@ const Basic = () => {
                           <input
                             type="text"
                             id="firstName"
+                            value={userData["firstName"]}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                firstName: e.target.value,
+                              });
+                            }}
                             name="firstName"
                             placeholder="Enter First Name"
                             className="form-control form-control"
@@ -38,6 +60,13 @@ const Basic = () => {
                             type="text"
                             id="lastName"
                             name="lastName"
+                            value={userData["lastName"]}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                lastName: e.target.value,
+                              });
+                            }}
                             placeholder="Enter Last Name"
                             className="form-control form-control"
                             required
@@ -52,6 +81,13 @@ const Basic = () => {
                               type="number"
                               id="age"
                               name="age"
+                              value={userData["age"]}
+                              onChange={(e) => {
+                                setUserData({
+                                  ...userData,
+                                  age: e.target.value,
+                                });
+                              }}
                               placeholder="Enter Your Age"
                               className="form-control form-control"
                               required
@@ -66,6 +102,13 @@ const Basic = () => {
                             <input
                               type="email"
                               id="email"
+                              value={userData["email"]}
+                              onChange={(e) => {
+                                setUserData({
+                                  ...userData,
+                                  email: e.target.value,
+                                });
+                              }}
                               name="email"
                               placeholder="Enter Email Address"
                               className="form-control form-control"
@@ -81,6 +124,13 @@ const Basic = () => {
                               type="number"
                               id="contact"
                               name="contact"
+                              value={userData["contact"]}
+                              onChange={(e) => {
+                                setUserData({
+                                  ...userData,
+                                  contact: e.target.value,
+                                });
+                              }}
                               placeholder="Enter Phone Number"
                               className="form-control form-control"
                               required
@@ -93,7 +143,14 @@ const Basic = () => {
                                 className="form-check-input"
                                 type="radio"
                                 name="gender"
+                                checked={userData["gender"] === "Male"}
                                 id="male"
+                                onChange={(e) => {
+                                  setUserData({
+                                    ...userData,
+                                    gender: e.target.value,
+                                  });
+                                }}
                                 value="Male"
                                 required
                               ></input>
@@ -110,6 +167,13 @@ const Basic = () => {
                                 type="radio"
                                 name="gender"
                                 id="female"
+                                checked={userData["gender"] === "Female"}
+                                onChange={(e) => {
+                                  setUserData({
+                                    ...userData,
+                                    gender: e.target.value,
+                                  });
+                                }}
                                 value="Female"
                                 required
                               ></input>
@@ -127,6 +191,13 @@ const Basic = () => {
                                 name="gender"
                                 id="other"
                                 value="Others"
+                                checked={userData["gender"] === "Others"}
+                                onChange={(e) => {
+                                  setUserData({
+                                    ...userData,
+                                    gender: e.target.value,
+                                  });
+                                }}
                                 required
                               ></input>
                               <label
@@ -139,8 +210,11 @@ const Basic = () => {
                           </div>
                         </div>
                       </div>
-                      <button type="submit" className="btn btn-success">
-                        Submit
+                      <button
+                        className="btn btn-success"
+                        onClick={handleChange}
+                      >
+                        Next
                       </button>
                     </form>
                   </div>

@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { multiStepContext } from "../StepContext";
 
 const Payment = () => {
+  const { setStep, userData, setUserData, submitData } =
+    useContext(multiStepContext);
+
   return (
     <>
       <section className="bg-image mt-5">
@@ -24,6 +28,13 @@ const Payment = () => {
                             type="text"
                             name="bankname"
                             id="bankname"
+                            value={userData["bankname"]}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                bankname: e.target.value,
+                              });
+                            }}
                             placeholder="Enter a Bank Name"
                             className="form-control form-control"
                             required
@@ -38,6 +49,13 @@ const Payment = () => {
                             type="number"
                             name="carddetails"
                             id="carddetails"
+                            value={userData["carddetails"]}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                carddetails: e.target.value,
+                              });
+                            }}
                             placeholder="Enter a Card Details"
                             className="form-control form-control"
                             required
@@ -45,14 +63,38 @@ const Payment = () => {
                           <span id="carddetailserror"></span>
                         </div>
                         <div className="form-outline mb-4">
-                          <input type="checkbox" name="terms" value="true">
-                            Tearms and Conditions
-                          </input>
+                          <input
+                            type="checkbox"
+                            id="terms"
+                            name="terms"
+                            checked={userData["terms"] === "true"}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                terms: e.target.value,
+                              });
+                            }}
+                            value="true"
+                          ></input>
+                          <label className="form-label" htmlFor="terms">
+                            Terms & Conditions
+                          </label>
                         </div>
                       </div>
-                      <button type="submit" className="btn btn-success">
-                        Submit
-                      </button>
+                      <div>
+                        <button
+                          className="btn btn-success"
+                          onClick={() => setStep(3)}
+                        >
+                          Prev
+                        </button>
+                        <button
+                          className="btn btn-success"
+                          onClick={submitData}
+                        >
+                          Submit
+                        </button>
+                      </div>
                     </form>
                   </div>
                 </div>
