@@ -5,7 +5,47 @@ export const multiStepContext = React.createContext();
 
 const StepContext = () => {
   const [currentStep, setStep] = useState(1);
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState([
+    {
+      firstName: "",
+      lastName: "",
+      age: "",
+      email: "",
+      contact: "",
+      gender: "",
+      address: "",
+      city: "",
+      state: "",
+      pincode: "",
+      slotdate: "",
+      slottime: "",
+      bankname: "",
+      carddetails: "",
+      terms: "false",
+    },
+  ]);
+
+  const [userError, setUserError] = useState({
+    firsterror: "",
+    lasterror: "",
+    ageerror: "",
+    emailerror: "",
+    contacterror: "",
+    gendererror: "",
+    addresserror: "",
+    cityerror: "",
+    stateerrro: "",
+    pincodeerror: "",
+    slotdateerror: "",
+    slottimeerror: "",
+    banknameerror: "",
+    carddetailserror: "",
+    termserror: "",
+  });
+
+  const [documents, setDocuments] = useState([
+    { documenttype: "", attachments: "" },
+  ]);
   const [finalData, setFinalData] = useState([]);
 
   function submitData() {
@@ -22,6 +62,10 @@ const StepContext = () => {
           setUserData,
           finalData,
           setFinalData,
+          documents,
+          setDocuments,
+          userError,
+          setUserError,
         }}
       >
         <App />

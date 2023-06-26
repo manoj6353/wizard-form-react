@@ -3,18 +3,34 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { multiStepContext } from "../StepContext";
 
 const Basic = () => {
-  const { setStep, userData, setUserData } = useContext(multiStepContext);
-  const initialValues = { firstName: "", lastName: "" };
-  const [formValues, setFormValues] = useState(initialValues);
-  const handleChange = (e) => {
-    const { firstName, value } = e.target;
-    console.log(firstName);
-    setFormValues({
-      ...formValues,
-      [firstName]: value,
-    });
-    console.log(formValues);
-    setStep(2);
+  const { setStep, userData, setUserData, userError, setUserError } =
+    useContext(multiStepContext);
+  const [isErrorActive, setIsErrorActive] = useState(false);
+
+  const setValue = (e) => {
+    const list = [...userData];
+    const value = e.target.value;
+    setUserData(
+      list.map((item) => {
+        return {
+          ...item,
+          [e.target.name]: value,
+        };
+      })
+    );
+  };
+
+  const handleChange = () => {
+    console.log(userData[0].firstName.length);
+    if (userData[0].firstName.length <= 1) {
+      setUserError((errors) => ({
+        ...errors,
+        firsterror: "First Name must be required",
+      }));
+    } else {
+      setUserError((errors) => ({ ...errors, firsterror: "" }));
+    }
+    // setStep(2);
   };
 
   return (
@@ -38,19 +54,18 @@ const Basic = () => {
                           <input
                             type="text"
                             id="firstName"
-                            value={userData["firstName"]}
+                            value={userData[0].firstName}
                             onChange={(e) => {
-                              setUserData({
-                                ...userData,
-                                firstName: e.target.value,
-                              });
+                              console.log(isErrorActive);
+                              isErrorActive && handleChange();
+                              setValue(e);
                             }}
                             name="firstName"
                             placeholder="Enter First Name"
                             className="form-control form-control"
                             required
                           ></input>
-                          <span id="firsterror"></span>
+                          <span id="firsterror">{userError["firsterror"]}</span>
                         </div>
                         <div className="form-outline mb-4">
                           <label className="form-label" htmlFor="lastName">
@@ -60,18 +75,17 @@ const Basic = () => {
                             type="text"
                             id="lastName"
                             name="lastName"
-                            value={userData["lastName"]}
-                            onChange={(e) => {
-                              setUserData({
-                                ...userData,
-                                lastName: e.target.value,
-                              });
+                            value={userData[0].lastName}
+                            onChange={() => {
+                              console.log(isErrorActive);
+                              isErrorActive && handleChange();
+                              setValue();
                             }}
                             placeholder="Enter Last Name"
                             className="form-control form-control"
                             required
                           ></input>
-                          <span id="lasterror"></span>
+                          <span id="lasterror">{userError["lasterror"]}</span>
 
                           <div className="form-outline mb-4">
                             <label className="form-label" htmlFor="age">
@@ -81,18 +95,13 @@ const Basic = () => {
                               type="number"
                               id="age"
                               name="age"
-                              value={userData["age"]}
-                              onChange={(e) => {
-                                setUserData({
-                                  ...userData,
-                                  age: e.target.value,
-                                });
-                              }}
+                              value={userData[0].age}
+                              onChange={setValue}
                               placeholder="Enter Your Age"
                               className="form-control form-control"
                               required
                             ></input>
-                            <span id="ageerror"></span>
+                            <span id="ageerror">{userError["ageerror"]}</span>
                           </div>
 
                           <div className="form-outline mb-4">
@@ -102,19 +111,16 @@ const Basic = () => {
                             <input
                               type="email"
                               id="email"
-                              value={userData["email"]}
-                              onChange={(e) => {
-                                setUserData({
-                                  ...userData,
-                                  email: e.target.value,
-                                });
-                              }}
+                              value={userData[0].email}
+                              onChange={setValue}
                               name="email"
                               placeholder="Enter Email Address"
                               className="form-control form-control"
                               required
                             ></input>
-                            <span id="emailerror"></span>
+                            <span id="emailerror">
+                              {userError["emailerror"]}
+                            </span>
                           </div>
                           <div className="form-outline mb-4">
                             <label className="form-label" htmlFor="contact">
@@ -124,18 +130,15 @@ const Basic = () => {
                               type="number"
                               id="contact"
                               name="contact"
-                              value={userData["contact"]}
-                              onChange={(e) => {
-                                setUserData({
-                                  ...userData,
-                                  contact: e.target.value,
-                                });
-                              }}
+                              value={userData[0].contact}
+                              onChange={setValue}
                               placeholder="Enter Phone Number"
                               className="form-control form-control"
                               required
                             ></input>
-                            <span id="contacterror"></span>
+                            <span id="contacterror">
+                              {userError["contacterror"]}
+                            </span>
                           </div>
                           <div className="form-outline mb-4">
                             <div className="form-check form-check-inline">
@@ -143,14 +146,9 @@ const Basic = () => {
                                 className="form-check-input"
                                 type="radio"
                                 name="gender"
-                                checked={userData["gender"] === "Male"}
+                                checked={userData[0].gender === "Male"}
                                 id="male"
-                                onChange={(e) => {
-                                  setUserData({
-                                    ...userData,
-                                    gender: e.target.value,
-                                  });
-                                }}
+                                onChange={setValue}
                                 value="Male"
                                 required
                               ></input>
@@ -167,13 +165,8 @@ const Basic = () => {
                                 type="radio"
                                 name="gender"
                                 id="female"
-                                checked={userData["gender"] === "Female"}
-                                onChange={(e) => {
-                                  setUserData({
-                                    ...userData,
-                                    gender: e.target.value,
-                                  });
-                                }}
+                                checked={userData[0].gender === "Female"}
+                                onChange={setValue}
                                 value="Female"
                                 required
                               ></input>
@@ -191,13 +184,8 @@ const Basic = () => {
                                 name="gender"
                                 id="other"
                                 value="Others"
-                                checked={userData["gender"] === "Others"}
-                                onChange={(e) => {
-                                  setUserData({
-                                    ...userData,
-                                    gender: e.target.value,
-                                  });
-                                }}
+                                checked={userData[0].gender === "Others"}
+                                onChange={setValue}
                                 required
                               ></input>
                               <label
@@ -207,15 +195,21 @@ const Basic = () => {
                                 Other
                               </label>
                             </div>
+                            <span id="gendererror">
+                              {userError["gendererror"]}
+                            </span>
                           </div>
                         </div>
                       </div>
-                      <button
+                      <p
                         className="btn btn-success"
-                        onClick={handleChange}
+                        onClick={() => {
+                          handleChange();
+                          setIsErrorActive(true);
+                        }}
                       >
                         Next
-                      </button>
+                      </p>
                     </form>
                   </div>
                 </div>

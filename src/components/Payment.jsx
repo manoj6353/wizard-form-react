@@ -6,6 +6,18 @@ const Payment = () => {
   const { setStep, userData, setUserData, submitData } =
     useContext(multiStepContext);
 
+  const setValue = (e) => {
+    const list = [...userData];
+    setUserData(
+      list.map((item) => {
+        return {
+          ...item,
+          [e.target.name]: e.target.value,
+        };
+      })
+    );
+  };
+
   return (
     <>
       <section className="bg-image mt-5">
@@ -28,13 +40,8 @@ const Payment = () => {
                             type="text"
                             name="bankname"
                             id="bankname"
-                            value={userData["bankname"]}
-                            onChange={(e) => {
-                              setUserData({
-                                ...userData,
-                                bankname: e.target.value,
-                              });
-                            }}
+                            value={userData[0].bankname}
+                            onChange={setValue}
                             placeholder="Enter a Bank Name"
                             className="form-control form-control"
                             required
@@ -49,13 +56,8 @@ const Payment = () => {
                             type="number"
                             name="carddetails"
                             id="carddetails"
-                            value={userData["carddetails"]}
-                            onChange={(e) => {
-                              setUserData({
-                                ...userData,
-                                carddetails: e.target.value,
-                              });
-                            }}
+                            value={userData[0].carddetails}
+                            onChange={setValue}
                             placeholder="Enter a Card Details"
                             className="form-control form-control"
                             required
@@ -67,13 +69,8 @@ const Payment = () => {
                             type="checkbox"
                             id="terms"
                             name="terms"
-                            checked={userData["terms"] === "true"}
-                            onChange={(e) => {
-                              setUserData({
-                                ...userData,
-                                terms: e.target.value,
-                              });
-                            }}
+                            checked={userData[0].terms === "true"}
+                            onChange={setValue}
                             value="true"
                           ></input>
                           <label className="form-label" htmlFor="terms">
@@ -84,10 +81,11 @@ const Payment = () => {
                       <div>
                         <button
                           className="btn btn-success"
-                          onClick={() => setStep(3)}
+                          onClick={() => setStep(4)}
                         >
                           Prev
                         </button>
+                        &emsp;
                         <button
                           className="btn btn-success"
                           onClick={submitData}

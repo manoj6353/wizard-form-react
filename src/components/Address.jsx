@@ -5,6 +5,18 @@ import { multiStepContext } from "../StepContext";
 const Address = () => {
   const { setStep, userData, setUserData } = useContext(multiStepContext);
 
+  const setValue = (e) => {
+    const list = [...userData];
+    setUserData(
+      list.map((item) => {
+        return {
+          ...item,
+          [e.target.name]: e.target.value,
+        };
+      })
+    );
+  };
+
   return (
     <>
       <section className="bg-image mt-5">
@@ -27,13 +39,8 @@ const Address = () => {
                             type="text"
                             name="address"
                             id="address"
-                            value={userData["address"]}
-                            onChange={(e) => {
-                              setUserData({
-                                ...userData,
-                                address: e.target.value,
-                              });
-                            }}
+                            value={userData[0].address}
+                            onChange={setValue}
                             className="form-control form-control"
                             placeholder="Address Line 1"
                             required
@@ -48,13 +55,8 @@ const Address = () => {
                             type="text"
                             name="city"
                             id="city"
-                            value={userData["city"]}
-                            onChange={(e) => {
-                              setUserData({
-                                ...userData,
-                                city: e.target.value,
-                              });
-                            }}
+                            value={userData[0].city}
+                            onChange={setValue}
                             placeholder="Enter City"
                             className="form-control form-control"
                             required
@@ -69,13 +71,8 @@ const Address = () => {
                             type="text"
                             name="state"
                             id="state"
-                            value={userData["state"]}
-                            onChange={(e) => {
-                              setUserData({
-                                ...userData,
-                                state: e.target.value,
-                              });
-                            }}
+                            value={userData[0].state}
+                            onChange={setValue}
                             placeholder="Enter State"
                             className="form-control form-control"
                             required
@@ -90,13 +87,8 @@ const Address = () => {
                             type="number"
                             name="pincode"
                             id="pincode"
-                            value={userData["pincode"]}
-                            onChange={(e) => {
-                              setUserData({
-                                ...userData,
-                                pincode: e.target.value,
-                              });
-                            }}
+                            value={userData[0].pincode}
+                            onChange={setValue}
                             placeholder="Enter Pincode"
                             className="form-control form-control"
                             required
@@ -111,6 +103,7 @@ const Address = () => {
                         >
                           Prev
                         </button>
+                        &emsp;
                         <button
                           className="btn btn-success"
                           onClick={() => setStep(3)}

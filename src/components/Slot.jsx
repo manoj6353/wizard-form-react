@@ -4,6 +4,19 @@ import { multiStepContext } from "../StepContext";
 
 const Slot = () => {
   const { setStep, userData, setUserData } = useContext(multiStepContext);
+
+  const setValue = (e) => {
+    const list = [...userData];
+    setUserData(
+      list.map((item) => {
+        return {
+          ...item,
+          [e.target.name]: e.target.value,
+        };
+      })
+    );
+  };
+
   return (
     <>
       <section className="bg-image mt-5">
@@ -26,13 +39,8 @@ const Slot = () => {
                             type="date"
                             name="slotdate"
                             id="slotdate"
-                            value={userData["slotdate"]}
-                            onChange={(e) => {
-                              setUserData({
-                                ...userData,
-                                slotdate: e.target.value,
-                              });
-                            }}
+                            value={userData[0].slotdate}
+                            onChange={setValue}
                             className="form-control form-control"
                             required
                           ></input>
@@ -43,16 +51,11 @@ const Slot = () => {
                             Slot Time
                           </label>
                           <input
-                            type="number"
+                            type="time"
                             name="slottime"
                             id="slottime"
-                            value={userData["slottime"]}
-                            onChange={(e) => {
-                              setUserData({
-                                ...userData,
-                                slottime: e.target.value,
-                              });
-                            }}
+                            value={userData[0].slottime}
+                            onChange={setValue}
                             placeholder="Enter Slot Time"
                             className="form-control form-control"
                             required
@@ -67,6 +70,7 @@ const Slot = () => {
                         >
                           Prev
                         </button>
+                        &emsp;
                         <button
                           className="btn btn-success"
                           onClick={() => setStep(5)}
