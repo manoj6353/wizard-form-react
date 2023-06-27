@@ -27,10 +27,26 @@ const Slot = () => {
   }, [errorTrue]);
 
   const handleChange = () => {
+    const today = new Date();
+    const year = today.toLocaleString("default", { year: "numeric" });
+    const month = today.toLocaleString("default", { month: "2-digit" });
+    const day = today.toLocaleString("default", { day: "2-digit" });
+    const todayDate = year + "-" + month + "-" + day;
+
+    const time = userData[0].slottime;
+    const firstTime = time.split(":");
+
+    console.log(firstTime[0] < 10 && firstTime[0] > 17);
+
     if (userData[0].slotdate.length === 0) {
       setUserError((errors) => ({
         ...errors,
         slotdateerror: "Date must be required",
+      }));
+    } else if (userData[0].slotdate <= todayDate) {
+      setUserError((errors) => ({
+        ...errors,
+        slotdateerror: "Date must be grather then current date",
       }));
     } else {
       setUserError((errors) => ({ ...errors, slotdateerror: "" }));
@@ -39,6 +55,11 @@ const Slot = () => {
       setUserError((errors) => ({
         ...errors,
         slottimeerror: "Time must be required",
+      }));
+    } else if (!(firstTime[0] >= 10 && firstTime[0] < 17)) {
+      setUserError((errors) => ({
+        ...errors,
+        slottimeerror: "Time must be between 10 and 17",
       }));
     } else {
       setUserError((errors) => ({ ...errors, slottimeerror: "" }));

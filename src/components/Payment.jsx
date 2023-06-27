@@ -38,6 +38,11 @@ const Payment = () => {
         ...errors,
         banknameerror: "Bank must be required",
       }));
+    } else if (!userData[0].bankname.match(/^[a-zA-Z ]{2,30}$/gm)) {
+      setUserError((errors) => ({
+        ...errors,
+        banknameerror: "Enter proper Bank name",
+      }));
     } else {
       setUserError((errors) => ({ ...errors, banknameerror: "" }));
     }
@@ -45,6 +50,15 @@ const Payment = () => {
       setUserError((errors) => ({
         ...errors,
         carddetailserror: "Card details must be required",
+      }));
+    } else if (
+      !userData[0].carddetails.match(
+        /^\(?([0-9]{4})\)?([0-9]{4})([0-9]{4})([0-9]{4})$/
+      )
+    ) {
+      setUserError((errors) => ({
+        ...errors,
+        carddetailserror: "Enter proper Card details",
       }));
     } else {
       setUserError((errors) => ({ ...errors, carddetailserror: "" }));

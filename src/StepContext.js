@@ -45,10 +45,14 @@ const StepContext = () => {
   });
 
   const [documentsError, setDocumentsError] = useState([
-    { documenttypeerror: "", attachmentserror: "" },
+    { documenttypeerror: "", attachmentserror: "", attachmentsizeerror: "" },
   ]);
   const [documents, setDocuments] = useState([
-    { documenttype: "", attachments: "" },
+    {
+      documenttype: "",
+      attachments: "",
+      attachmentsize: "",
+    },
   ]);
   const [finalData, setFinalData] = useState([]);
 

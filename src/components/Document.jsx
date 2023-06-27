@@ -5,8 +5,6 @@ import { multiStepContext } from "../StepContext";
 const Documents = () => {
   const {
     setStep,
-    userData,
-    setUserData,
     documents,
     setDocuments,
     documentsError,
@@ -19,6 +17,11 @@ const Documents = () => {
   const setValue = (e, index) => {
     const document = [...documents];
     document[index][e.target.name] = e.target.value;
+    if (e.target.type === "file") {
+      document[index][e.target.name] = e.target.files[0].name || "";
+      document[index]["attachmentsize"] = e.target.files[0].size / 1024 / 1024;
+      document[index]["attachmentstype"] = e.target.files[0].type;
+    }
     setDocuments(document);
     setErrorTrue(e);
   };
@@ -42,6 +45,21 @@ const Documents = () => {
         const documentError = [...documentsError];
         documentError[index].attachmentserror = "Image must be required";
         setDocumentsError(documentError);
+      } else if (documents[index].attachmentsize > 1) {
+        const documentError = [...documentsError];
+        documentError[index].attachmentserror = "Image less than 1 MB";
+        setDocumentsError(documentError);
+      } else if (
+        !documents[index].attachments.match(/\.(jpg|jpeg|png|img)$/i)
+      ) {
+        const documentError = [...documentsError];
+        documentError[index].attachmentserror =
+          "Image must be of type jpg/jpeg/png/img";
+        setDocumentsError(documentError);
+        console.log(
+          "documents[index].attachmentstype.includes(imageType)",
+          !documents[index].attachments.match(/\.(jpg|jpeg|png|img)$/i)
+        );
       } else {
         const documentError = [...documentsError];
         documentError[index].attachmentserror = "";
@@ -65,10 +83,21 @@ const Documents = () => {
   };
 
   const handleAddMore = () => {
-    setDocuments([...documents, { documenttype: "", attachments: "" }]);
+    setDocuments([
+      ...documents,
+      {
+        documenttype: "",
+        attachments: "",
+        attachmentsize: "",
+      },
+    ]);
     setDocumentsError([
       ...documentsError,
-      { documenttypeerror: "", attachmentserror: "" },
+      {
+        documenttypeerror: "",
+        attachmentserror: "",
+        attachmentsizeerror: "",
+      },
     ]);
   };
   return (
@@ -101,15 +130,10 @@ const Documents = () => {
                                 value={documents[index].documenttype}
                                 onChange={(e) => {
                                   setValue(e, index);
-                                  // const document = [...documents];
-                                  // document[index].documenttype = e.target.value;
-                                  // setDocuments(document);
                                 }}
                                 required
                               >
-                                <option value="HSC" selected>
-                                  HSC Marksheet
-                                </option>
+                                <option value="HSC">HSC Marksheet</option>
                                 <option value="AADHAR-CARD">Aadhar Card</option>
                                 <option value="PHOTO">Photo</option>
                                 <option value="SIGNATURE">Signature</option>
@@ -122,6 +146,10 @@ const Documents = () => {
                               <label className="form-label" htmlFor="city">
                                 Attachments
                               </label>
+                              <br />
+                              <label className="form-label" htmlFor="city">
+                                {documents[index].attachments}
+                              </label>
                               <input
                                 type="file"
                                 name="attachments"
@@ -129,10 +157,6 @@ const Documents = () => {
                                 className="form-control form-control"
                                 onChange={(e) => {
                                   setValue(e, index);
-                                  // const attachment = [...documents];
-                                  // attachment[index].attachments =
-                                  //   e.target.value;
-                                  // setDocuments(attachment);
                                 }}
                                 required
                               ></input>
