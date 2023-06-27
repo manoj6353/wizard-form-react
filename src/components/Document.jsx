@@ -1,19 +1,75 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { multiStepContext } from "../StepContext";
 
 const Documents = () => {
-  const { setStep, userData, setUserData, documents, setDocuments } =
-    useContext(multiStepContext);
-  const [documentType, setDocumentType] = useState([
-    "HSC",
-    "Aadhar Card",
-    "Photo",
-    "Signature",
-  ]);
+  const {
+    setStep,
+    userData,
+    setUserData,
+    documents,
+    setDocuments,
+    documentsError,
+    setDocumentsError,
+  } = useContext(multiStepContext);
+
+  const [isErrorActive, setIsErrorActive] = useState(false);
+  const [errorTrue, setErrorTrue] = useState("");
+
+  const setValue = (e, index) => {
+    const document = [...documents];
+    document[index][e.target.name] = e.target.value;
+    setDocuments(document);
+    setErrorTrue(e);
+  };
+
+  useEffect(() => {
+    isErrorActive && handleChange();
+  }, [errorTrue]);
+
+  const handleChange = () => {
+    documentsError.map((e, index) => {
+      if (documents[index].documenttype.length === 0) {
+        const documentError = [...documentsError];
+        documentError[index].documenttypeerror = "Document must be required";
+        setDocumentsError(documentError);
+      } else {
+        const documentError = [...documentsError];
+        documentError[index].documenttypeerror = "";
+        setDocumentsError(documentError);
+      }
+      if (documents[index].attachments.length === 0) {
+        const documentError = [...documentsError];
+        documentError[index].attachmentserror = "Image must be required";
+        setDocumentsError(documentError);
+      } else {
+        const documentError = [...documentsError];
+        documentError[index].attachmentserror = "";
+        setDocumentsError(documentError);
+      }
+    });
+  };
+
+  const checkValid = () => {
+    documentsError.map((item, index) => {
+      if (
+        documentsError[index].attachmentserror === "" &&
+        documentsError[index].documenttypeerror === "" &&
+        isErrorActive
+      ) {
+        setStep(4);
+      } else {
+        return false;
+      }
+    });
+  };
 
   const handleAddMore = () => {
     setDocuments([...documents, { documenttype: "", attachments: "" }]);
+    setDocumentsError([
+      ...documentsError,
+      { documenttypeerror: "", attachmentserror: "" },
+    ]);
   };
   return (
     <>
@@ -43,11 +99,11 @@ const Documents = () => {
                                 id="documenttype"
                                 name="documenttype"
                                 value={documents[index].documenttype}
-                                onChange={(event) => {
-                                  const document = [...documents];
-                                  document[index].documenttype =
-                                    event.target.value;
-                                  setDocuments(document);
+                                onChange={(e) => {
+                                  setValue(e, index);
+                                  // const document = [...documents];
+                                  // document[index].documenttype = e.target.value;
+                                  // setDocuments(document);
                                 }}
                                 required
                               >
@@ -58,7 +114,9 @@ const Documents = () => {
                                 <option value="PHOTO">Photo</option>
                                 <option value="SIGNATURE">Signature</option>
                               </select>
-                              <span id="documenterror"></span>
+                              <span id="documenterror" style={{ color: "Red" }}>
+                                {documentsError[index].documenttypeerror}
+                              </span>
                             </div>
                             <div className="form-outline mb-4">
                               <label className="form-label" htmlFor="city">
@@ -69,24 +127,33 @@ const Documents = () => {
                                 name="attachments"
                                 id="attachments"
                                 className="form-control form-control"
-                                onChange={(event) => {
-                                  const attachment = [...documents];
-                                  attachment[index].attachments =
-                                    event.target.value;
-                                  setDocuments(attachment);
+                                onChange={(e) => {
+                                  setValue(e, index);
+                                  // const attachment = [...documents];
+                                  // attachment[index].attachments =
+                                  //   e.target.value;
+                                  // setDocuments(attachment);
                                 }}
                                 required
                               ></input>
-                              <span id="attachmentserror"></span>
+                              <span
+                                id="attachmentserror"
+                                style={{ color: "Red" }}
+                              >
+                                {documentsError[index].attachmentserror}
+                              </span>
                             </div>
-                            <div style={{ color: "red" }}>
+                            <div style={{ textAlign: "end" }}>
                               {index > 0 && (
                                 <button
                                   className="btn btn-dark"
                                   onClick={() => {
                                     const document = [...documents];
                                     document.splice(index, 1);
+                                    const documentError = [...documentsError];
+                                    documentError.splice(index, 1);
                                     setDocuments(document);
+                                    setDocumentsError(documentError);
                                   }}
                                 >
                                   Remove
@@ -95,29 +162,30 @@ const Documents = () => {
                             </div>
                           </div>
                         ))}
-                        <button
-                          onClick={handleAddMore}
-                          className="btn btn-dark"
-                        >
+                        <p onClick={handleAddMore} className="btn btn-dark">
                           Add More
-                        </button>
+                        </p>
                         <br />
                         <br />
                       </div>
                       <div>
-                        <button
+                        <p
                           className="btn btn-success"
                           onClick={() => setStep(2)}
                         >
                           Prev
-                        </button>
+                        </p>
                         &emsp;
-                        <button
+                        <p
                           className="btn btn-success"
-                          onClick={() => setStep(4)}
+                          onClick={() => {
+                            setIsErrorActive(true);
+                            handleChange();
+                            checkValid();
+                          }}
                         >
                           Next
-                        </button>
+                        </p>
                       </div>
                     </form>
                   </div>

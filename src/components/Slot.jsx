@@ -1,9 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { multiStepContext } from "../StepContext";
 
 const Slot = () => {
-  const { setStep, userData, setUserData } = useContext(multiStepContext);
+  const { setStep, userData, setUserData, userError, setUserError } =
+    useContext(multiStepContext);
+
+  const [isErrorActive, setIsErrorActive] = useState(false);
+  const [errorTrue, setErrorTrue] = useState("");
 
   const setValue = (e) => {
     const list = [...userData];
@@ -15,6 +19,42 @@ const Slot = () => {
         };
       })
     );
+    setErrorTrue(e);
+  };
+
+  useEffect(() => {
+    isErrorActive && handleChange();
+  }, [errorTrue]);
+
+  const handleChange = () => {
+    if (userData[0].slotdate.length === 0) {
+      setUserError((errors) => ({
+        ...errors,
+        slotdateerror: "Date must be required",
+      }));
+    } else {
+      setUserError((errors) => ({ ...errors, slotdateerror: "" }));
+    }
+    if (userData[0].slottime.length === 0) {
+      setUserError((errors) => ({
+        ...errors,
+        slottimeerror: "Time must be required",
+      }));
+    } else {
+      setUserError((errors) => ({ ...errors, slottimeerror: "" }));
+    }
+  };
+
+  const checkValid = () => {
+    if (
+      userError["slotdateerror"] === "" &&
+      userError["slottimeerror"] === "" &&
+      isErrorActive
+    ) {
+      setStep(5);
+    } else {
+      return false;
+    }
   };
 
   return (
@@ -44,7 +84,9 @@ const Slot = () => {
                             className="form-control form-control"
                             required
                           ></input>
-                          <span id="slotdateerror"></span>
+                          <span id="slotdateerror" style={{ color: "Red" }}>
+                            {userError["slotdateerror"]}
+                          </span>
                         </div>
                         <div className="form-outline mb-4">
                           <label className="form-label" htmlFor="slottime">
@@ -60,23 +102,29 @@ const Slot = () => {
                             className="form-control form-control"
                             required
                           ></input>
-                          <span id="slottimeerror"></span>
+                          <span id="slottimeerror" style={{ color: "Red" }}>
+                            {userError["slottimeerror"]}
+                          </span>
                         </div>
                       </div>
                       <div>
-                        <button
+                        <p
                           className="btn btn-success"
                           onClick={() => setStep(3)}
                         >
                           Prev
-                        </button>
+                        </p>
                         &emsp;
-                        <button
+                        <p
                           className="btn btn-success"
-                          onClick={() => setStep(5)}
+                          onClick={() => {
+                            setIsErrorActive(true);
+                            handleChange();
+                            checkValid();
+                          }}
                         >
                           Next
-                        </button>
+                        </p>
                       </div>
                     </form>
                   </div>

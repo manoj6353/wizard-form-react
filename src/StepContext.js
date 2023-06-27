@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 
 export const multiStepContext = React.createContext();
@@ -43,14 +44,21 @@ const StepContext = () => {
     termserror: "",
   });
 
+  const [documentsError, setDocumentsError] = useState([
+    { documenttypeerror: "", attachmentserror: "" },
+  ]);
   const [documents, setDocuments] = useState([
     { documenttype: "", attachments: "" },
   ]);
   const [finalData, setFinalData] = useState([]);
 
-  function submitData() {
-    setFinalData((finalData) => [...finalData, userData]);
-  }
+  const submitData = () => {
+    alert("success");
+    setFinalData((finalData) => [...finalData, { userData, documents }]);
+    console.log(finalData);
+    localStorage.setItem("data", JSON.stringify(finalData));
+    setStep(1);
+  };
 
   return (
     <>
@@ -66,6 +74,9 @@ const StepContext = () => {
           setDocuments,
           userError,
           setUserError,
+          documentsError,
+          setDocumentsError,
+          submitData,
         }}
       >
         <App />

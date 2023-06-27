@@ -1,10 +1,19 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { multiStepContext } from "../StepContext";
 
 const Payment = () => {
-  const { setStep, userData, setUserData, submitData } =
-    useContext(multiStepContext);
+  const {
+    setStep,
+    userData,
+    setUserData,
+    submitData,
+    userError,
+    setUserError,
+  } = useContext(multiStepContext);
+
+  const [isErrorActive, setIsErrorActive] = useState(false);
+  const [errorTrue, setErrorTrue] = useState("");
 
   const setValue = (e) => {
     const list = [...userData];
@@ -16,6 +25,51 @@ const Payment = () => {
         };
       })
     );
+    setErrorTrue(e);
+  };
+
+  useEffect(() => {
+    isErrorActive && handleChange();
+  }, [errorTrue]);
+
+  const handleChange = () => {
+    if (userData[0].bankname.length === 0) {
+      setUserError((errors) => ({
+        ...errors,
+        banknameerror: "Bank must be required",
+      }));
+    } else {
+      setUserError((errors) => ({ ...errors, banknameerror: "" }));
+    }
+    if (userData[0].carddetails.length === 0) {
+      setUserError((errors) => ({
+        ...errors,
+        carddetailserror: "Card details must be required",
+      }));
+    } else {
+      setUserError((errors) => ({ ...errors, carddetailserror: "" }));
+    }
+    if (userData[0].terms === "false") {
+      setUserError((errors) => ({
+        ...errors,
+        termserror: "Terms & condition must be required",
+      }));
+    } else {
+      setUserError((errors) => ({ ...errors, termserror: "" }));
+    }
+  };
+
+  const checkValid = () => {
+    if (
+      userError["carddetailserror"] === "" &&
+      userError["banknameerror"] === "" &&
+      userError["termserror"] === "" &&
+      isErrorActive
+    ) {
+      submitData();
+    } else {
+      return false;
+    }
   };
 
   return (
@@ -46,7 +100,9 @@ const Payment = () => {
                             className="form-control form-control"
                             required
                           ></input>
-                          <span id="banknameerror"></span>
+                          <span id="banknameerror" style={{ color: "Red" }}>
+                            {userError["banknameerror"]}
+                          </span>
                         </div>
                         <div className="form-outline mb-4">
                           <label className="form-label" htmlFor="carddetails">
@@ -62,7 +118,9 @@ const Payment = () => {
                             className="form-control form-control"
                             required
                           ></input>
-                          <span id="carddetailserror"></span>
+                          <span id="carddetailserror" style={{ color: "Red" }}>
+                            {userError["carddetailserror"]}
+                          </span>
                         </div>
                         <div className="form-outline mb-4">
                           <input
@@ -76,22 +134,29 @@ const Payment = () => {
                           <label className="form-label" htmlFor="terms">
                             Terms & Conditions
                           </label>
+                          <span id="termserror" style={{ color: "Red" }}>
+                            {userError["termserror"]}
+                          </span>
                         </div>
                       </div>
                       <div>
-                        <button
+                        <p
                           className="btn btn-success"
                           onClick={() => setStep(4)}
                         >
                           Prev
-                        </button>
+                        </p>
                         &emsp;
-                        <button
+                        <p
                           className="btn btn-success"
-                          onClick={submitData}
+                          onClick={() => {
+                            setIsErrorActive(true);
+                            handleChange();
+                            checkValid();
+                          }}
                         >
                           Submit
-                        </button>
+                        </p>
                       </div>
                     </form>
                   </div>

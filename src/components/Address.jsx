@@ -1,9 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { multiStepContext } from "../StepContext";
 
 const Address = () => {
-  const { setStep, userData, setUserData } = useContext(multiStepContext);
+  const { setStep, userData, setUserData, userError, setUserError } =
+    useContext(multiStepContext);
+  const [isErrorActive, setIsErrorActive] = useState(false);
+  const [errorTrue, setErrorTrue] = useState("");
 
   const setValue = (e) => {
     const list = [...userData];
@@ -15,6 +18,60 @@ const Address = () => {
         };
       })
     );
+    setErrorTrue(e);
+  };
+
+  useEffect(() => {
+    isErrorActive && handleChange();
+  }, [errorTrue]);
+
+  const handleChange = () => {
+    if (userData[0].address.length === 0) {
+      setUserError((errors) => ({
+        ...errors,
+        addresserror: "Address must be required",
+      }));
+    } else {
+      setUserError((errors) => ({ ...errors, addresserror: "" }));
+    }
+    if (userData[0].city.length === 0) {
+      setUserError((errors) => ({
+        ...errors,
+        cityerror: "City must be required",
+      }));
+    } else {
+      setUserError((errors) => ({ ...errors, cityerror: "" }));
+    }
+    if (userData[0].state.length === 0) {
+      setUserError((errors) => ({
+        ...errors,
+        stateerror: "State must be required",
+      }));
+    } else {
+      setUserError((errors) => ({ ...errors, stateerror: "" }));
+    }
+    if (userData[0].pincode.length === 0) {
+      setUserError((errors) => ({
+        ...errors,
+        pincodeerror: "PinCode must be required",
+      }));
+    } else {
+      setUserError((errors) => ({ ...errors, pincodeerror: "" }));
+    }
+  };
+
+  const checkValid = () => {
+    if (
+      userError["addresserror"] === "" &&
+      userError["pincodeerror"] === "" &&
+      userError["stateerror"] === "" &&
+      userError["cityerror"] === "" &&
+      isErrorActive
+    ) {
+      setStep(3);
+    } else {
+      return false;
+    }
   };
 
   return (
@@ -45,7 +102,9 @@ const Address = () => {
                             placeholder="Address Line 1"
                             required
                           ></input>
-                          <span id="addresserror"></span>
+                          <span id="addresserror" style={{ color: "Red" }}>
+                            {userError["addresserror"]}
+                          </span>
                         </div>
                         <div className="form-outline mb-4">
                           <label className="form-label" htmlFor="city">
@@ -61,7 +120,9 @@ const Address = () => {
                             className="form-control form-control"
                             required
                           ></input>
-                          <span id="cityerror"></span>
+                          <span id="cityerror" style={{ color: "Red" }}>
+                            {userError["cityerror"]}
+                          </span>
                         </div>
                         <div className="form-outline mb-4">
                           <label className="form-label" htmlFor="state">
@@ -77,7 +138,9 @@ const Address = () => {
                             className="form-control form-control"
                             required
                           ></input>
-                          <span id="stateerror"></span>
+                          <span id="stateerror" style={{ color: "Red" }}>
+                            {userError["stateerror"]}
+                          </span>
                         </div>
                         <div className="form-outline mb-4">
                           <label className="form-label" htmlFor="pincode">
@@ -93,23 +156,29 @@ const Address = () => {
                             className="form-control form-control"
                             required
                           ></input>
-                          <span id="pincodeerror"></span>
+                          <span id="pincodeerror" style={{ color: "Red" }}>
+                            {userError["pincodeerror"]}
+                          </span>
                         </div>
                       </div>
                       <div>
-                        <button
+                        <p
                           className="btn btn-success"
                           onClick={() => setStep(1)}
                         >
                           Prev
-                        </button>
+                        </p>
                         &emsp;
-                        <button
+                        <p
                           className="btn btn-success"
-                          onClick={() => setStep(3)}
+                          onClick={() => {
+                            setIsErrorActive(true);
+                            handleChange();
+                            checkValid();
+                          }}
                         >
                           Next
-                        </button>
+                        </p>
                       </div>
                     </form>
                   </div>
