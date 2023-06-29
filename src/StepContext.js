@@ -1,30 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 
 export const multiStepContext = React.createContext();
 
 const StepContext = () => {
-  const [currentStep, setStep] = useState(1);
-  const [userData, setUserData] = useState([
-    {
-      firstName: "",
-      lastName: "",
-      age: "",
-      email: "",
-      contact: "",
-      gender: "",
-      address: "",
-      city: "",
-      state: "",
-      pincode: "",
-      slotdate: "",
-      slottime: "",
-      bankname: "",
-      carddetails: "",
-      terms: "false",
-    },
-  ]);
+  const [currentStep, setStep] = useState(5);
+  const [userData, setUserData] = useState({
+    firstName: "",
+    lastName: "",
+    age: "",
+    email: "",
+    contact: "",
+    gender: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
+    slotdate: "",
+    slottime: "",
+    bankname: "",
+    carddetails: "",
+    terms: "false",
+  });
 
   const [userError, setUserError] = useState({
     firsterror: "",
@@ -49,19 +47,21 @@ const StepContext = () => {
   ]);
   const [documents, setDocuments] = useState([
     {
+      id: "1",
       documenttype: "",
       attachments: "",
       attachmentsize: "",
     },
   ]);
-  const [finalData, setFinalData] = useState([]);
 
   const submitData = () => {
     alert("success");
-    setFinalData((finalData) => [...finalData, { userData, documents }]);
-    console.log(finalData);
-    localStorage.setItem("data", JSON.stringify(finalData));
-    setStep(1);
+    const Data = { ...userData, documents };
+    const getData = JSON.parse(localStorage.getItem("data") || "[]");
+    let ids = getData.length + 1;
+    // Data.id = ids;
+    getData.push(Data);
+    localStorage.setItem("data", JSON.stringify(getData));
   };
 
   return (
@@ -72,8 +72,6 @@ const StepContext = () => {
           setStep,
           userData,
           setUserData,
-          finalData,
-          setFinalData,
           documents,
           setDocuments,
           userError,

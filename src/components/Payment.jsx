@@ -16,15 +16,10 @@ const Payment = () => {
   const [errorTrue, setErrorTrue] = useState("");
 
   const setValue = (e) => {
-    const list = [...userData];
-    setUserData(
-      list.map((item) => {
-        return {
-          ...item,
-          [e.target.name]: e.target.value,
-        };
-      })
-    );
+    setUserData({
+      ...userData,
+      [e.target.name]: e.target.value,
+    });
     setErrorTrue(e);
   };
 
@@ -33,12 +28,12 @@ const Payment = () => {
   }, [errorTrue]);
 
   const handleChange = () => {
-    if (userData[0].bankname.length === 0) {
+    if (userData["bankname"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         banknameerror: "Bank must be required",
       }));
-    } else if (!userData[0].bankname.match(/^[a-zA-Z ]{2,30}$/gm)) {
+    } else if (!userData["bankname"].match(/^[a-zA-Z ]{2,30}$/gm)) {
       setUserError((errors) => ({
         ...errors,
         banknameerror: "Enter proper Bank name",
@@ -46,13 +41,13 @@ const Payment = () => {
     } else {
       setUserError((errors) => ({ ...errors, banknameerror: "" }));
     }
-    if (userData[0].carddetails.length === 0) {
+    if (userData["carddetails"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         carddetailserror: "Card details must be required",
       }));
     } else if (
-      !userData[0].carddetails.match(
+      !userData["carddetails"].match(
         /^\(?([0-9]{4})\)?([0-9]{4})([0-9]{4})([0-9]{4})$/
       )
     ) {
@@ -63,7 +58,7 @@ const Payment = () => {
     } else {
       setUserError((errors) => ({ ...errors, carddetailserror: "" }));
     }
-    if (userData[0].terms === "false") {
+    if (userData["terms"] === "false") {
       setUserError((errors) => ({
         ...errors,
         termserror: "Terms & condition must be required",
@@ -108,7 +103,7 @@ const Payment = () => {
                             type="text"
                             name="bankname"
                             id="bankname"
-                            value={userData[0].bankname}
+                            value={userData["bankname"]}
                             onChange={setValue}
                             placeholder="Enter a Bank Name"
                             className="form-control form-control"
@@ -126,7 +121,7 @@ const Payment = () => {
                             type="number"
                             name="carddetails"
                             id="carddetails"
-                            value={userData[0].carddetails}
+                            value={userData["carddetails"]}
                             onChange={setValue}
                             placeholder="Enter a Card Details"
                             className="form-control form-control"
@@ -141,7 +136,7 @@ const Payment = () => {
                             type="checkbox"
                             id="terms"
                             name="terms"
-                            checked={userData[0].terms === "true"}
+                            checked={userData["terms"] === "true"}
                             onChange={setValue}
                             value="true"
                           ></input>
@@ -154,14 +149,16 @@ const Payment = () => {
                         </div>
                       </div>
                       <div>
-                        <p
+                        <button
+                          type="button"
                           className="btn btn-success"
                           onClick={() => setStep(4)}
                         >
                           Prev
-                        </p>
+                        </button>
                         &emsp;
-                        <p
+                        <button
+                          type="button"
                           className="btn btn-success"
                           onClick={() => {
                             setIsErrorActive(true);
@@ -170,7 +167,7 @@ const Payment = () => {
                           }}
                         >
                           Submit
-                        </p>
+                        </button>
                       </div>
                     </form>
                   </div>

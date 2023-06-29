@@ -9,15 +9,10 @@ const Address = () => {
   const [errorTrue, setErrorTrue] = useState("");
 
   const setValue = (e) => {
-    const list = [...userData];
-    setUserData(
-      list.map((item) => {
-        return {
-          ...item,
-          [e.target.name]: e.target.value,
-        };
-      })
-    );
+    setUserData({
+      ...userData,
+      [e.target.name]: e.target.value,
+    });
     setErrorTrue(e);
   };
 
@@ -26,7 +21,7 @@ const Address = () => {
   }, [errorTrue]);
 
   const handleChange = () => {
-    if (userData[0].address.length === 0) {
+    if (userData["address"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         addresserror: "Address must be required",
@@ -34,7 +29,7 @@ const Address = () => {
     } else {
       setUserError((errors) => ({ ...errors, addresserror: "" }));
     }
-    if (userData[0].city.length === 0) {
+    if (userData["city"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         cityerror: "City must be required",
@@ -42,7 +37,7 @@ const Address = () => {
     } else {
       setUserError((errors) => ({ ...errors, cityerror: "" }));
     }
-    if (userData[0].state.length === 0) {
+    if (userData["state"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         stateerror: "State must be required",
@@ -50,7 +45,7 @@ const Address = () => {
     } else {
       setUserError((errors) => ({ ...errors, stateerror: "" }));
     }
-    if (userData[0].pincode.length === 0) {
+    if (userData["pincode"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         pincodeerror: "PinCode must be required",
@@ -96,7 +91,7 @@ const Address = () => {
                             type="text"
                             name="address"
                             id="address"
-                            value={userData[0].address}
+                            value={userData["address"]}
                             onChange={setValue}
                             className="form-control form-control"
                             placeholder="Address Line 1"
@@ -114,7 +109,7 @@ const Address = () => {
                             type="text"
                             name="city"
                             id="city"
-                            value={userData[0].city}
+                            value={userData["city"]}
                             onChange={setValue}
                             placeholder="Enter City"
                             className="form-control form-control"
@@ -132,7 +127,7 @@ const Address = () => {
                             type="text"
                             name="state"
                             id="state"
-                            value={userData[0].state}
+                            value={userData["state"]}
                             onChange={setValue}
                             placeholder="Enter State"
                             className="form-control form-control"
@@ -150,7 +145,7 @@ const Address = () => {
                             type="number"
                             name="pincode"
                             id="pincode"
-                            value={userData[0].pincode}
+                            value={userData["pincode"]}
                             onChange={setValue}
                             placeholder="Enter Pincode"
                             className="form-control form-control"
@@ -162,14 +157,16 @@ const Address = () => {
                         </div>
                       </div>
                       <div>
-                        <p
+                        <button
+                          type="button"
                           className="btn btn-success"
                           onClick={() => setStep(1)}
                         >
                           Prev
-                        </p>
+                        </button>
                         &emsp;
-                        <p
+                        <button
+                          type="button"
                           className="btn btn-success"
                           onClick={() => {
                             setIsErrorActive(true);
@@ -178,7 +175,7 @@ const Address = () => {
                           }}
                         >
                           Next
-                        </p>
+                        </button>
                       </div>
                     </form>
                   </div>

@@ -10,15 +10,10 @@ const Slot = () => {
   const [errorTrue, setErrorTrue] = useState("");
 
   const setValue = (e) => {
-    const list = [...userData];
-    setUserData(
-      list.map((item) => {
-        return {
-          ...item,
-          [e.target.name]: e.target.value,
-        };
-      })
-    );
+    setUserData({
+      ...userData,
+      [e.target.name]: e.target.value,
+    });
     setErrorTrue(e);
   };
 
@@ -33,17 +28,17 @@ const Slot = () => {
     const day = today.toLocaleString("default", { day: "2-digit" });
     const todayDate = year + "-" + month + "-" + day;
 
-    const time = userData[0].slottime;
+    const time = userData["slottime"];
     const firstTime = time.split(":");
 
     console.log(firstTime[0] < 10 && firstTime[0] > 17);
 
-    if (userData[0].slotdate.length === 0) {
+    if (userData["slotdate"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         slotdateerror: "Date must be required",
       }));
-    } else if (userData[0].slotdate <= todayDate) {
+    } else if (userData["slotdate"] <= todayDate) {
       setUserError((errors) => ({
         ...errors,
         slotdateerror: "Date must be grather then current date",
@@ -51,7 +46,7 @@ const Slot = () => {
     } else {
       setUserError((errors) => ({ ...errors, slotdateerror: "" }));
     }
-    if (userData[0].slottime.length === 0) {
+    if (userData["slottime"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         slottimeerror: "Time must be required",
@@ -100,7 +95,7 @@ const Slot = () => {
                             type="date"
                             name="slotdate"
                             id="slotdate"
-                            value={userData[0].slotdate}
+                            value={userData["slotdate"]}
                             onChange={setValue}
                             className="form-control form-control"
                             required
@@ -117,7 +112,7 @@ const Slot = () => {
                             type="time"
                             name="slottime"
                             id="slottime"
-                            value={userData[0].slottime}
+                            value={userData["slottime"]}
                             onChange={setValue}
                             placeholder="Enter Slot Time"
                             className="form-control form-control"
@@ -129,14 +124,16 @@ const Slot = () => {
                         </div>
                       </div>
                       <div>
-                        <p
+                        <button
+                          type="button"
                           className="btn btn-success"
                           onClick={() => setStep(3)}
                         >
                           Prev
-                        </p>
+                        </button>
                         &emsp;
-                        <p
+                        <button
+                          type="button"
                           className="btn btn-success"
                           onClick={() => {
                             setIsErrorActive(true);
@@ -145,7 +142,7 @@ const Slot = () => {
                           }}
                         >
                           Next
-                        </p>
+                        </button>
                       </div>
                     </form>
                   </div>

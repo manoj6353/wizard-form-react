@@ -26,12 +26,12 @@ const Basic = () => {
   }, [errorTrue]);
 
   const handleChange = () => {
-    if (userData[0].firstName.length === 0) {
+    if (userData["firstName"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         firsterror: "First Name must be required",
       }));
-    } else if (!userData[0].firstName.match(/^[a-zA-Z ]{2,30}$/gm)) {
+    } else if (!userData["firstName"].match(/^[a-zA-Z ]{2,30}$/gm)) {
       setUserError((errors) => ({
         ...errors,
         firsterror: "Enter proper first name",
@@ -39,12 +39,12 @@ const Basic = () => {
     } else {
       setUserError((errors) => ({ ...errors, firsterror: "" }));
     }
-    if (userData[0].lastName.length === 0) {
+    if (userData["lastName"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         lasterror: "Last Name must be required",
       }));
-    } else if (!userData[0].lastName.match(/^[a-zA-Z ]{2,30}$/gm)) {
+    } else if (!userData["lastName"].match(/^[a-zA-Z ]{2,30}$/gm)) {
       setUserError((errors) => ({
         ...errors,
         lasterror: "Enter proper Last name",
@@ -52,12 +52,12 @@ const Basic = () => {
     } else {
       setUserError((errors) => ({ ...errors, lasterror: "" }));
     }
-    if (userData[0].age.length === 0) {
+    if (userData["age"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         ageerror: "Age must be required",
       }));
-    } else if (!userData[0].age.match(/^(1[89]|[2-5]\d)$/gm)) {
+    } else if (!userData["age"].match(/^(1[89]|[2-5]\d)$/gm)) {
       setUserError((errors) => ({
         ...errors,
         ageerror: "Age must be greater than 17 and less than 60",
@@ -65,12 +65,12 @@ const Basic = () => {
     } else {
       setUserError((errors) => ({ ...errors, ageerror: "" }));
     }
-    if (userData[0].email.length === 0) {
+    if (userData["email"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         emailerror: "Email must be required",
       }));
-    } else if (!userData[0].email.match(/\S+@\S+\.\S+/)) {
+    } else if (!userData["email"].match(/\S+@\S+\.\S+/)) {
       setUserError((errors) => ({
         ...errors,
         emailerror: "Enter proper Email address",
@@ -78,13 +78,13 @@ const Basic = () => {
     } else {
       setUserError((errors) => ({ ...errors, emailerror: "" }));
     }
-    if (userData[0].contact.length === 0) {
+    if (userData["contact"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         contacterror: "Contact must be required",
       }));
     } else if (
-      !userData[0].contact.match(/^\(?([0-9]{3})\)?([0-9]{3})([0-9]{4})$/)
+      !userData["contact"].match(/^\(?([0-9]{3})\)?([0-9]{3})([0-9]{4})$/)
     ) {
       setUserError((errors) => ({
         ...errors,
@@ -93,7 +93,7 @@ const Basic = () => {
     } else {
       setUserError((errors) => ({ ...errors, contacterror: "" }));
     }
-    if (userData[0].gender.length === 0) {
+    if (userData["gender"].length === 0) {
       setUserError((errors) => ({
         ...errors,
         gendererror: "Gender must be required",
@@ -144,7 +144,7 @@ const Basic = () => {
                           <input
                             type="text"
                             id="firstName"
-                            value={userData[0].firstName}
+                            value={userData["firstName"]}
                             onChange={(e) => {
                               setValue(e);
                             }}
@@ -165,7 +165,7 @@ const Basic = () => {
                             type="text"
                             id="lastName"
                             name="lastName"
-                            value={userData[0].lastName}
+                            value={userData["lastName"]}
                             onChange={(e) => {
                               setValue(e);
                             }}
@@ -185,7 +185,7 @@ const Basic = () => {
                             type="number"
                             id="age"
                             name="age"
-                            value={userData[0].age}
+                            value={userData["age"]}
                             onChange={(e) => {
                               setValue(e);
                             }}
@@ -205,7 +205,7 @@ const Basic = () => {
                           <input
                             type="email"
                             id="email"
-                            value={userData[0].email}
+                            value={userData["email"]}
                             onChange={(e) => {
                               setValue(e);
                             }}
@@ -226,7 +226,7 @@ const Basic = () => {
                             type="number"
                             id="contact"
                             name="contact"
-                            value={userData[0].contact}
+                            value={userData["contact"]}
                             onChange={(e) => {
                               setValue(e);
                             }}
@@ -244,7 +244,7 @@ const Basic = () => {
                               className="form-check-input"
                               type="radio"
                               name="gender"
-                              checked={userData[0].gender === "Male"}
+                              checked={userData["gender"] === "Male"}
                               id="male"
                               onChange={(e) => {
                                 setValue(e);
@@ -262,7 +262,7 @@ const Basic = () => {
                               type="radio"
                               name="gender"
                               id="female"
-                              checked={userData[0].gender === "Female"}
+                              checked={userData["gender"] === "Female"}
                               onChange={(e) => {
                                 setValue(e);
                               }}
@@ -283,7 +283,7 @@ const Basic = () => {
                               name="gender"
                               id="other"
                               value="Others"
-                              checked={userData[0].gender === "Others"}
+                              checked={userData["gender"] === "Others"}
                               onChange={(e) => {
                                 setValue(e);
                               }}
@@ -300,7 +300,8 @@ const Basic = () => {
                         </div>
                       </div>
 
-                      <p
+                      <button
+                        type="button"
                         className="btn btn-success"
                         onClick={() => {
                           setIsErrorActive(true);
@@ -309,7 +310,7 @@ const Basic = () => {
                         }}
                       >
                         Next
-                      </p>
+                      </button>
                     </form>
                   </div>
                 </div>

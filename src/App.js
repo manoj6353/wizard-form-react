@@ -5,8 +5,8 @@ import Address from "./components/Address";
 import Document from "./components/Document";
 import Slot from "./components/Slot";
 import Payment from "./components/Payment";
-import { Step, StepLabel, Stepper } from "@material-ui/core";
 import { multiStepContext } from "./StepContext";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
   const { currentStep, finalData } = useContext(multiStepContext);
@@ -30,35 +30,11 @@ function App() {
 
   return (
     <>
-      <center>
-        <Stepper
-          style={{ width: "18%" }}
-          activeStep={currentStep - 1}
-          orientation="horizontal"
-        >
-          <Step>
-            <StepLabel></StepLabel>
-          </Step>
-          <Step>
-            <StepLabel></StepLabel>
-          </Step>
-          <Step>
-            <StepLabel></StepLabel>
-          </Step>
-          <Step>
-            <StepLabel></StepLabel>
-          </Step>
-          <Step>
-            <StepLabel></StepLabel>
-          </Step>
-        </Stepper>
-      </center>
-      {showStep(currentStep)}
-      {/* <Basic />
-      <Address />
-      <Document />
-      <Slot />
-      <Payment /> */}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={showStep(currentStep)} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
