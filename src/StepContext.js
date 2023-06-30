@@ -5,7 +5,7 @@ import App from "./App";
 export const multiStepContext = React.createContext();
 
 const StepContext = () => {
-  const [currentStep, setStep] = useState(5);
+  const [currentStep, setStep] = useState(1);
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
@@ -56,12 +56,21 @@ const StepContext = () => {
 
   const submitData = () => {
     alert("success");
-    const Data = { ...userData, documents };
-    const getData = JSON.parse(localStorage.getItem("data") || "[]");
-    let ids = getData.length + 1;
-    // Data.id = ids;
-    getData.push(Data);
-    localStorage.setItem("data", JSON.stringify(getData));
+    const data = { ...userData, documents };
+    let getData = JSON.parse(localStorage.getItem("data") || "[]");
+    console.log(data.index);
+    if (data.index) {
+      const index = data.index;
+      getData[index] = data;
+      console.log("============");
+      localStorage.setItem("data", JSON.stringify(getData));
+    } else {
+      data.id = Math.floor(Math.random() * 99999);
+      getData.push(data);
+      console.log("--------------------");
+      localStorage.setItem("data", JSON.stringify(getData));
+    }
+    window.location.reload();
   };
 
   return (

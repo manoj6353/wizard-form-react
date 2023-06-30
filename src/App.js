@@ -5,11 +5,13 @@ import Address from "./components/Address";
 import Document from "./components/Document";
 import Slot from "./components/Slot";
 import Payment from "./components/Payment";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { multiStepContext } from "./StepContext";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Table from "./components/Table";
 
 function App() {
-  const { currentStep, finalData } = useContext(multiStepContext);
+  const { currentStep } = useContext(multiStepContext);
 
   function showStep(step) {
     switch (step) {
@@ -30,11 +32,26 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={showStep(currentStep)} />
-        </Routes>
-      </BrowserRouter>
+      <div className="App">
+        <header className="App-header">
+          <div className="button">
+            <button className="btn btn-success">
+              <a href="/">Form</a>
+            </button>
+            &nbsp;
+            <button className="btn btn-success">
+              <a href="/get-data">Show</a>
+            </button>
+          </div>
+          <br />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={showStep(currentStep)} />
+              <Route path="/get-data" element={<Table />} />
+            </Routes>
+          </BrowserRouter>
+        </header>
+      </div>
     </>
   );
 }

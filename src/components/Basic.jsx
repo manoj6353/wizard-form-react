@@ -8,16 +8,11 @@ const Basic = () => {
   const [isErrorActive, setIsErrorActive] = useState(false);
   const [errorTrue, setErrortrue] = useState("");
   const setValue = (e) => {
-    const list = [...userData];
     const value = e.target.value;
-    setUserData(
-      list.map((item) => {
-        return {
-          ...item,
-          [e.target.name]: value,
-        };
-      })
-    );
+    setUserData({
+      ...userData,
+      [e.target.name]: value,
+    });
     setErrortrue(e);
   };
 

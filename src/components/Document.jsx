@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { multiStepContext } from "../StepContext";
 
 const Documents = () => {
@@ -14,16 +13,28 @@ const Documents = () => {
   const [isErrorActive, setIsErrorActive] = useState(false);
   const [errorTrue, setErrorTrue] = useState("");
 
-  const setValue = (e, index) => {
+  const setValue = async (e, index) => {
     const document = [...documents];
+
     document[index][e.target.name] = e.target.value;
     if (e.target.type === "file") {
-      document[index][e.target.name] = e.target.files[0].name || "";
+      const file = e.target.files[0];
+      const files = await getBase64(file);
+      document[index][e.target.name] = files;
       document[index]["attachmentsize"] = e.target.files[0].size / 1024 / 1024;
       document[index]["attachmentstype"] = e.target.files[0].type;
     }
     setDocuments(document);
     setErrorTrue(e);
+  };
+
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
   };
 
   useEffect(() => {
@@ -49,17 +60,6 @@ const Documents = () => {
         const documentError = [...documentsError];
         documentError[index].attachmentserror = "Image less than 1 MB";
         setDocumentsError(documentError);
-      } else if (
-        !documents[index].attachments.match(/\.(jpg|jpeg|png|img)$/i)
-      ) {
-        const documentError = [...documentsError];
-        documentError[index].attachmentserror =
-          "Image must be of type jpg/jpeg/png/img";
-        setDocumentsError(documentError);
-        console.log(
-          "documents[index].attachmentstype.includes(imageType)",
-          !documents[index].attachments.match(/\.(jpg|jpeg|png|img)$/i)
-        );
       } else {
         const documentError = [...documentsError];
         documentError[index].attachmentserror = "";
@@ -86,6 +86,7 @@ const Documents = () => {
     setDocuments([
       ...documents,
       {
+        id: Math.random(),
         documenttype: "",
         attachments: "",
         attachmentsize: "",
@@ -99,6 +100,7 @@ const Documents = () => {
         attachmentsizeerror: "",
       },
     ]);
+    console.log("=====", documents);
   };
   return (
     <>
@@ -115,7 +117,7 @@ const Documents = () => {
                       <div className="tab">
                         <legend>Upload Documents</legend>
                         {documents.map((document, index) => (
-                          <div key={index}>
+                          <div key={documents[index].id}>
                             <div className="form-outline mb-4">
                               <label
                                 className="form-label"
@@ -147,12 +149,17 @@ const Documents = () => {
                                 Attachments
                               </label>
                               <br />
-                              <label className="form-label" htmlFor="city">
-                                {documents[index].attachments}
-                              </label>
+                              <img
+                                width={100}
+                                height={100}
+                                id="imgPreview"
+                                src={documents[index].attachments}
+                                alt="pic"
+                              />
                               <input
                                 type="file"
                                 name="attachments"
+                                accept=".png, .jpg, .jpeg"
                                 id="attachments"
                                 className="form-control form-control"
                                 onChange={(e) => {
@@ -170,6 +177,7 @@ const Documents = () => {
                             <div style={{ textAlign: "end" }}>
                               {index > 0 && (
                                 <button
+                                  type="button"
                                   className="btn btn-dark"
                                   onClick={() => {
                                     const document = [...documents];
@@ -186,21 +194,27 @@ const Documents = () => {
                             </div>
                           </div>
                         ))}
-                        <p onClick={handleAddMore} className="btn btn-dark">
+                        <button
+                          type="button"
+                          onClick={handleAddMore}
+                          className="btn btn-dark"
+                        >
                           Add More
-                        </p>
+                        </button>
                         <br />
                         <br />
                       </div>
                       <div>
-                        <p
+                        <button
+                          type="button"
                           className="btn btn-success"
                           onClick={() => setStep(2)}
                         >
                           Prev
-                        </p>
+                        </button>
                         &emsp;
-                        <p
+                        <button
+                          type="button"
                           className="btn btn-success"
                           onClick={() => {
                             setIsErrorActive(true);
@@ -209,7 +223,7 @@ const Documents = () => {
                           }}
                         >
                           Next
-                        </p>
+                        </button>
                       </div>
                     </form>
                   </div>
