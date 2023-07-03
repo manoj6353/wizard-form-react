@@ -53,3 +53,12 @@
   color: black;
   text-decoration: none;
 }
+
+#TABLE th {
+  cursor: pointer;
+}
+
+.search {
+  text-align: end;
+  padding-right: 3rem;
+}

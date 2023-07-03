@@ -57,18 +57,16 @@ const StepContext = () => {
   const submitData = () => {
     alert("success");
     const data = { ...userData, documents };
-    let getData = JSON.parse(localStorage.getItem("data") || "[]");
-    console.log(data.index);
-    if (data.index) {
+    let getData = JSON.parse(localStorage.getItem("save-data") || "[]");
+    console.log(data.index !== undefined && data.index !== "");
+    if (data.index !== "" && data.index !== undefined) {
       const index = data.index;
       getData[index] = data;
-      console.log("============");
-      localStorage.setItem("data", JSON.stringify(getData));
+      localStorage.setItem("save-data", JSON.stringify(getData));
     } else {
       data.id = Math.floor(Math.random() * 99999);
       getData.push(data);
-      console.log("--------------------");
-      localStorage.setItem("data", JSON.stringify(getData));
+      localStorage.setItem("save-data", JSON.stringify(getData));
     }
     window.location.reload();
   };
