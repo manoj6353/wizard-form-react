@@ -5,6 +5,11 @@ import { useNavigate } from "react-router-dom";
 const Table = () => {
   const [data, setData] = useState([]);
   const [tempData, setTempData] = useState([]);
+  const [searchData, setSearchData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalRecord = data.length;
+  const [recordPerPage, setRecordPerPage] = useState(2);
+  const navigate = useNavigate();
   const { setUserData, setDocuments, setDocumentsError } =
     useContext(multiStepContext);
   useEffect(() => {
@@ -12,7 +17,9 @@ const Table = () => {
     setData(result);
   }, []);
 
-  const navigate = useNavigate();
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   const [isDelete, setIsDelete] = useState("");
   const deleteData = (id) => {
@@ -75,25 +82,26 @@ const Table = () => {
   const [sortData, setSortData] = useState("asc");
   const [sortColumn, setSortColumn] = useState("");
 
-  let sort = data;
-
   useEffect(() => {
     if (sortData === "asc") {
-      const strAscending = [...data].sort((a, b) =>
+      const strAscending = [...tempData].sort((a, b) =>
         a?.[sortColumn] > b?.[sortColumn] ? 1 : -1
       );
       setSortData("desc");
       setTempData(strAscending);
     } else if (sortData === "desc") {
-      const strDescending = [...data].sort((a, b) =>
+      const strDescending = [...tempData].sort((a, b) =>
         a?.[sortColumn] > b?.[sortColumn] ? -1 : 1
       );
       setSortData("");
       setTempData(strDescending);
     } else {
-      const defaults = [...data].sort((a, b) => b);
+      if (data.length === tempData.length) {
+        setTempData(data);
+      } else {
+        setTempData(searchData);
+      }
       setSortData("asc");
-      setTempData(defaults);
     }
   }, [sortColumn]);
 
@@ -103,23 +111,67 @@ const Table = () => {
       setSortData("asc");
     } else {
       if (sortData === "asc") {
-        const strAscending = [...data].sort((a, b) =>
+        const strAscending = [...tempData].sort((a, b) =>
           a?.[sorting] > b?.[sorting] ? 1 : -1
         );
         setSortData("desc");
         setTempData(strAscending);
       } else if (sortData === "desc") {
-        const strDescending = [...data].sort((a, b) =>
+        const strDescending = [...tempData].sort((a, b) =>
           a?.[sorting] > b?.[sorting] ? -1 : 1
         );
         setSortData("");
         setTempData(strDescending);
       } else {
-        setTempData(sort);
+        if (data.length === tempData.length) {
+          setTempData(data);
+        } else {
+          setTempData(searchData);
+        }
         setSortData("asc");
       }
     }
   };
+  const indexOfLastRecord = currentPage * recordPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordPerPage;
+  const [currentRecord, setCurrentRecord] = useState(
+    data.slice(indexOfFirstRecord, indexOfLastRecord)
+  );
+
+  const Pagination = ({ recordPerPage, totalRecord, paginate }) => {
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(totalRecord / recordPerPage); i++) {
+      pageNumbers.push(i);
+    }
+    return (
+      <div className="Pagination">
+        <select
+          name="recordPerPage"
+          value={recordPerPage}
+          onChange={(e) => setRecordPerPage(e.target.value)}
+        >
+          <option value={2}>2</option>
+          <option value={4}>4</option>
+          <option value={6}>6</option>
+        </select>
+        {pageNumbers.map((number) => (
+          <>
+            <button
+              className={currentPage === number ? "active" : ""}
+              key={number}
+              onClick={() => paginate(number)}
+            >
+              {number}
+            </button>
+          </>
+        ))}
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    setTempData(data.slice(indexOfFirstRecord, indexOfLastRecord));
+  }, [indexOfFirstRecord, indexOfLastRecord, data]);
 
   useEffect(() => {
     const result = JSON.parse(localStorage.getItem("save-data") || "[]");
@@ -141,7 +193,7 @@ const Table = () => {
     );
     if (data !== []) {
       setTempData(data);
-      sort = data;
+      setSearchData(data);
     }
   };
 
@@ -169,8 +221,8 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {data.length !== 0 ? (
-            data.map((d, index) => (
+          {tempData.length !== 0 ? (
+            tempData.map((d, index) => (
               <tr key={index}>
                 <td>{d.id}</td>
                 <td>{d.firstName}</td>
@@ -187,13 +239,19 @@ const Table = () => {
             ))
           ) : (
             <tr style={{ textAlign: "center" }}>
-              <td colSpan={8}>No record Found</td>
+              <td colSpan={8}>No record found</td>
             </tr>
           )}
         </tbody>
       </table>
 
-      <div></div>
+      <div className="Pagination">
+        <Pagination
+          recordPerPage={recordPerPage}
+          totalRecord={totalRecord}
+          paginate={paginate}
+        />
+      </div>
     </>
   );
 };
